@@ -98,23 +98,20 @@ const menuItems = [
 
   // --- Полная блокировка скролла, пока интро не завершено ---
   useEffect(() => {
-    const preventScroll = (e: Event) => {
-  e.preventDefault();
-};
+    const preventScroll = (e: Event) => e.preventDefault();
 
-useEffect(() => {
-  if (!introDone) {
-    window.addEventListener("wheel", preventScroll, { passive: false });
-    window.addEventListener("touchmove", preventScroll, { passive: false });
-    window.addEventListener("keydown", preventScroll, { passive: false });
-  }
+    if (!introDone) {
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
+      window.addEventListener("keydown", preventScroll, { passive: false });
+    }
 
-  return () => {
-    window.removeEventListener("wheel", preventScroll);
-    window.removeEventListener("touchmove", preventScroll);
-    window.removeEventListener("keydown", preventScroll);
-  };
-}, [introDone]);
+    return () => {
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      window.removeEventListener("keydown", preventScroll);
+    };
+  }, [introDone]);
 
 
   // --- Глушим хэши и автоскроллы браузера ---
