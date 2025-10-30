@@ -98,9 +98,10 @@ const menuItems = [
 
   // --- Полная блокировка скролла, пока интро не завершено ---
   useEffect(() => {
-    const preventScroll = (e) => {
-      if (!introDone) e.preventDefault();
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+     if (!introDone) e.preventDefault();
     };
+
 
     window.addEventListener("wheel", preventScroll, { passive: false });
     window.addEventListener("touchmove", preventScroll, { passive: false });
