@@ -131,13 +131,14 @@ const menuItems = [
     clearHash();
     window.scrollTo(0, 0);
 
-    const onHashChange = (e) => {
-      if (!introDone) {
-        e.preventDefault?.();
-        clearHash();
-        window.scrollTo(0, 0);
-      }
-    };
+    const onHashChange = (e: HashChangeEvent) => {
+  if (!introDone) {
+    e.preventDefault?.();
+    clearHash();
+    window.scrollTo(0, 0);
+  }
+};
+
 
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
