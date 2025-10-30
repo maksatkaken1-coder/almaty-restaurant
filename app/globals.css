@@ -1,26 +1,591 @@
-@import "tailwindcss";
+/* ================== ШРИФТЫ ================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Cinzel+Decorative:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ================== БАЗА / RESET ================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: transparent;
+  overflow-x: hidden;
+}
+html, body {
+  overflow-x: hidden !important;
+  width: 100%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+body:not(.intro-done) { overflow: hidden; }
+* { box-sizing: border-box; }
+
+/* ================== ЛОГОТИП (SVG) ================== */
+.logo-svg { width: min(90vw, 900px); height: auto; }
+
+.logo-outline.main, .logo-fill.main {
+  font-family: 'Prata', serif;
+  font-size: 200px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.logo-outline.sub, .logo-fill.sub {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 60px;
+  letter-spacing: .10em;
+  transform: translateX(135px);
+}
+
+.logo-outline {
+  fill: none;
+  stroke: #d0d3d6;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  animation: draw 4s ease forwards, glow 2s ease-in-out infinite alternate;
+}
+
+.logo-fill {
+  fill: url(#goldGradient);
+  opacity: 0;
+  animation: fillIn 1s ease forwards 3s;
+}
+
+/* ================== ИНТРО ================== */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 1s ease;
+}
+
+/* ================== ФОН ================== */
+#background {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+}
+
+body.bg-visible #background { opacity: 1; }
+#background.fade-out-bg { opacity: 0; transition: opacity 1.2s ease; }
+
+#background .bg-image {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+              url("/images/almaty-hero.jpg") center center / cover no-repeat;
+  filter: brightness(0.75) contrast(1.1);
+  transform: scale(1.05);
+  animation: zoomOut 18s ease-out forwards;
+}
+
+/* ================== ГЛАВНЫЙ ЭКРАН (HERO) ================== */
+#hero {
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  background: transparent;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+body.intro-done #hero { opacity: 1; transform: translateY(0); }
+
+.hero-content { max-width: 800px; padding: 0 20px; }
+
+#hero h1 span {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 7vw, 100px);
+  background: linear-gradient(90deg, #d4af37 0%, #fff4b0 40%, #d4af37 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 6s linear infinite;
+  letter-spacing: 0.03em;
+}
+
+#hero p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.8vw, 36px);
+  color: #f5f5f5;
+  line-height: 1.4;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.hero-locations.gold-gradient {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(14px, 1.4vw, 20px);
+  text-transform: uppercase;
+  margin-top: 14px;
+  margin-bottom: 36px;
+  background: linear-gradient(135deg, #d4af37 0%, #fff2a8 45%, #b8860b 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn, .btn-outline {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 50px;
+  font-family: 'Prata', serif;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all .4s ease;
+}
+
+.btn {
+  background: linear-gradient(90deg, #d4af37, #fff2a8, #b8860b);
+  background-size: 200%;
+  animation: shine 4s linear infinite;
+  color: #0a0b0d;
+  border: 1.5px solid #d4af37;
+}
+.btn:hover { background-position: -200% 0; }
+
+.btn-outline {
+  border: 1.5px solid #d4af37;
+  color: #d4af37;
+  background: transparent;
+}
+.btn-outline:hover { background: #d4af37; color: #0a0b0d; }
+
+/* ================== ОБЩИЕ СЕКЦИИ ================== */
+.clean-section {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  color: #111;
+  padding: 120px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity .9s ease, transform .9s ease;
+  position: relative;
+  z-index: 2;
+}
+.clean-section:nth-of-type(even) { background: #f8f8f8; }
+.show-on-scroll { opacity: 1 !important; transform: translateY(0) !important; }
+
+.section-content { max-width: 900px; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4.5vw, 52px);
+  margin: 0 0 18px;
+  color: #111;
+}
+.clean-section .lead {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: #444;
+  line-height: 1.7;
+  margin: 0 auto 28px;
+  max-width: 800px;
+}
+
+/* ================== О РЕСТОРАНЕ ================== */
+.about-section {
+  background: #fffdf8;
+  padding: 120px 0;
+}
+.about-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.about-text { flex: 1; }
+.about-text .section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(36px, 4vw, 48px);
+}
+.about-text .lead {
+  font-family: 'Prata', serif;
+  font-size: clamp(18px, 2vw, 20px);
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 24px;
+}
+.about-text .mission {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 1.8vw, 18px);
+  color: #555;
+  line-height: 1.7;
+  border-left: 3px solid #d4af37;
+  padding-left: 16px;
+}
+.about-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.about-image img {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  transition: transform 0.6s ease;
+}
+.about-image img:hover { transform: scale(1.02); }
+
+/* ================== МЕНЮ ================== */
+.menu {
+  background: linear-gradient(180deg, #fffaf3, #ffffff);
+  padding: 4rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  margin-top: 3rem;
+}
+
+.menu-intro {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+/* Горизонтальная лента блюд */
+.menu-scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 8px 12px 8px;   /* компактно и без переполнения */
+  margin: 0 auto;
+  max-width: 100%;           /* предотвращает выход за экран */
+  box-sizing: border-box;
+}
+.menu-scroll .menu-card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+}
+.menu-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+  border-radius: 10px;
+}
+
+
+/* Тонкая полоса прокрутки (только при наведении) */
+.menu-scroll::-webkit-scrollbar { height: 6px; }
+.menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+  border-radius: 10px;
+}
+.menu-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+}
+
+/* Карточки блюд */
+.menu-scroll .menu-card {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+.menu-scroll .menu-card:hover {
+  transform: translateY(-4px);
+}
+.menu-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.menu-body {
+  padding: 14px 16px;
+}
+.menu-body h3 {
+  margin: 0;
+  font-family: 'Prata', serif;
+  font-size: 18px;
+  color: #111;
+  text-align: center;
+}
+
+/* 📱 Адаптив меню */
+@media (max-width: 768px) {
+  .menu {
+    padding: 3rem 1rem;
+  }
+
+  .menu-scroll {
+    gap: 12px;
+    padding: 8px 6px 14px;
+  }
+
+  .menu-scroll .menu-card {
+    flex: 0 0 220px; /* карточки чуть меньше */
+  }
+
+  .menu-card img {
+    height: 160px;
+  }
+
+  .menu-body h3 {
+    font-size: 16px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 📱 Маленькие смартфоны (до 480px) */
+@media (max-width: 480px) {
+  .menu-scroll {
+    gap: 10px;
+    padding: 6px;
+  }
+
+  .menu-scroll .menu-card {
+    flex: 0 0 180px;
+  }
+
+  .menu-card img {
+    height: 140px;
+  }
+
+  .menu-body h3 {
+    font-size: 15px;
+  }
+}
+
+/* ================== КОНТАКТЫ ================== */
+.address {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+.address .locations {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.address .loc {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  width: 420px;
+  transition: all 0.3s ease;
+}
+.address .loc:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.address .loc h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+}
+.address .loc p {
+  font-size: 0.95rem;
+  color: #555;
+}
+.map-wrap iframe {
+  border-radius: 12px;
+  width: 100%;
+  height: 250px;
+  border: none;
+}
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+.socials a {
+  color: #a37a00;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.socials a:hover { color: #d4af37; }
+.micro {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* ================== АДАПТИВ ================== */
+@media (max-width: 900px) {
+  .about-wrapper { flex-direction: column-reverse; text-align: center; }
+  .about-text .mission { border: none; padding-left: 0; }
+  .address .locations { flex-direction: column; align-items: center; }
+  .address .loc { width: 90%; }
+}
+@media (max-width: 480px) {
+  .menu-scroll .menu-card { flex-basis: 220px; }
+}
+
+/* ================== АНИМАЦИИ ================== */
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fillIn { to { opacity: 1; } }
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+  50% { filter: drop-shadow(0 0 14px rgba(255,255,255,.25)); }
+}
+@keyframes fadeInBg { to { opacity: 1; } }
+@keyframes zoomOut { from { transform: scale(1.1); } to { transform: scale(1); } }
+@keyframes shine {
+  0% { background-position: -200%; }
+  50% { background-position: 200%; }
+  100% { background-position: -200%; }
+}
+
+/* ==== FIX: убираем горизонтальный скролл у страницы, но не у ленты ==== */
+html, body { overflow-x: hidden !important; width: 100%; }
+img { max-width: 100%; height: auto; }
+
+/* ==== FIX: внутри .clean-section контент может сжиматься (важно для мобилок) ==== */
+.clean-section > .section-content,
+.clean-section .menu,
+.clean-section .menu-scroll {
+  min-width: 0; /* ключевая строчка */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ==== Контейнер секции "Меню" — аккуратные поля и центрирование ==== */
+.section-content.menu {
+  max-width: 960px;
+  margin: 0 auto;
+  padding-inline: 12px; /* небольшие поля, чтобы карточки не залипали к краю */
+}
+
+/* ==== Горизонтальная лента: безопасная ширина + плавный свайп ==== */
+.menu-scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;            /* скролл остаётся! */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  padding: 8px 12px 16px;      /* внутренние поля вместо отрицательных маргинов */
+  margin: 0;                   /* не даём выйти за экран */
+  max-width: 100%;
+  contain: content;            /* мелкий оптимайз, чтобы не дёргалось */
+}
+
+/* ширина карточек — адаптивно, но не шире экрана */
+.menu-scroll .menu-card {
+  flex: 0 0 clamp(200px, 72vw, 280px);
+  scroll-snap-align: start;
+}
+
+/* чуть компактнее на узких экранах */
+@media (max-width: 480px) {
+  .menu-scroll { gap: 12px; padding: 6px 10px 14px; }
+  .menu-scroll .menu-card { flex-basis: clamp(180px, 78vw, 240px); }
+}
+
+/* косметика полосы прокрутки (не влияет на логику) */
+.menu-scroll::-webkit-scrollbar { height: 6px; }
+.menu-scroll::-webkit-scrollbar-track { background: transparent; }
+.menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.18);
+  border-radius: 999px;
+}
+.menu-scroll:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,.28); }
+/* ================== ⚙️ Тонкая настройка отступов на мобильных ================== */
+
+/* Отступы внутри секции "Меню" */
+#menu.clean-section {
+  padding: 60px 0 40px 0;   /* меньше вертикальных отступов */
+}
+
+.section-content.menu {
+  max-width: 100%;
+  padding-inline: 10px;      /* равномерно слева и справа */
+  box-sizing: border-box;
+}
+
+/* Контейнер горизонтального скролла */
+.menu-scroll {
+  padding: 4px 8px 12px 8px; /* аккуратные внутренние поля */
+  gap: 12px;
+  scroll-padding-left: 8px;  /* чтобы первый элемент не прилипал */
+}
+
+/* Карточки — адаптируем размер и отступ */
+.menu-scroll .menu-card {
+  flex: 0 0 clamp(180px, 80vw, 240px);
+  margin: 0;                 /* убираем возможные внешние маргины */
+  scroll-snap-align: start;
+}
+
+/* Отступы между кнопками GrabFood */
+.menu-cta {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-cta .btn {
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  font-size: 15px;
+}
+
+/* Маленький шрифт для подсказки */
+.menu-cta .hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ================== 📱 Специально для очень узких экранов (iPhone SE) ================== */
+@media (max-width: 380px) {
+  #menu.clean-section {
+    padding: 50px 0 30px 0;
+  }
+
+  .menu-scroll {
+    padding: 4px 6px 10px 6px;
+    gap: 10px;
+  }
+
+  .menu-scroll .menu-card {
+    flex-basis: 170px;
+  }
+
+  .menu-cta .btn {
+    max-width: 260px;
+    font-size: 14px;
+  }
 }
