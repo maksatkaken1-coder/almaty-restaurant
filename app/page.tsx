@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export default function Home() {
+function Home() {
   const [introDone, setIntroDone] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);// --- Меню Almaty Restaurant ---
 // Папка изображений: /public/images/menu/
@@ -466,5 +466,4 @@ const menuItems = [
     </main>
   );
 }
-
 export default Home;
